@@ -143,9 +143,9 @@
     tbody tr:hover { background:#fafbfc; }
     td { padding:11px 14px; vertical-align:middle; }
     td.center { text-align:center; }
-    .td-name { font-weight:700; color:#2c3e50; white-space:nowrap; }
-    .td-what { color:#444; }
-    .td-qty  { color:#666; white-space:nowrap; }
+    .td-name { font-weight:700; color:#2c3e50; white-space:normal; min-width:80px; max-width:130px; }
+    .td-what { color:#444; min-width:200px; }
+    .td-qty  { color:#666; white-space:normal; max-width:80px; word-break:break-word; }
     .td-cena { color:#27ae60; font-weight:600; white-space:nowrap; }
 
     /* Checkbox připraveno – interaktivní */
@@ -244,6 +244,16 @@
       <div class="input-group">
         <label>Cena (Kč)</label>
         <input type="text" id="editCena">
+      </div>
+    </div>
+    <div class="input-group" style="margin-top:8px;">
+      <label>Foto dárku</label>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px;">
+        <img id="editPhotoPreview" src="" alt="" style="display:none;width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #e0e6ed;cursor:zoom-in;" onclick="openLightbox(document.getElementById('editPhotoPreview').src)">
+        <button type="button" class="btn btn-sm btn-photo" id="editPhotoBtn" onclick="document.getElementById('editPhotoFileInput').click()">📷 Přidat / změnit foto</button>
+        <input type="file" id="editPhotoFileInput" class="hidden-file" accept="image/*" capture="environment">
+        <div id="editPhotoName" style="font-size:11px;color:#27ae60;"></div>
+        <div class="upload-progress" id="editPhotoProgress"><div class="spinner"></div><span>Nahrávám…</span></div>
       </div>
     </div>
     <div class="modal-actions">
@@ -366,7 +376,7 @@
     div.id = 'giftRow_' + idx;
     div.innerHTML = `
       <div class="input-group">
-        <label>Co přineseš</label>
+        <label>Název/popis dárku</label>
         <input type="text" id="rowCo_${idx}" placeholder="Název / popis dárku">
       </div>
       <div class="input-group">
@@ -397,16 +407,12 @@
 
   function toggleAddForm() {
     const f = document.getElementById('addForm');
-    const isHidden = f.style.display === 'none';
-    f.style.display = isHidden ? 'block' : 'none';
-    if (isHidden) {
-      // Inicializuj první řádek pokud ještě není
-      const rows = document.getElementById('giftRows');
-      if (rows.children.length === 0) {
-        rowCounter = 0;
-        addGiftRow();
-      }
-    }
+    // Vždy otevřít a inicializovat při každém kliknutí
+    document.getElementById('giftRows').innerHTML = '';
+    rowCounter = 0;
+    addGiftRow();
+    f.style.display = 'block';
+    f.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ── Přidat dárek (jeden nebo více) ──
@@ -498,11 +504,33 @@
     document.getElementById('editMnozstvi').value = g.mnozstvi || '';
     document.getElementById('editCena').value     = g.cena     || '';
     hideMsg('editMsg');
+    // Zobraz stávající foto v modalu
+    const preview = document.getElementById('editPhotoPreview');
+    const editPhotoName = document.getElementById('editPhotoName');
+    const editPhotoBtn  = document.getElementById('editPhotoBtn');
+    if (g.fotoUrl) {
+      preview.src = g.fotoUrl; preview.style.display = 'block';
+      editPhotoBtn.textContent = '📷 Změnit foto'; editPhotoBtn.className = 'btn btn-sm btn-photo done';
+    } else {
+      preview.src = ''; preview.style.display = 'none';
+      editPhotoBtn.textContent = '📷 Přidat foto'; editPhotoBtn.className = 'btn btn-sm btn-photo';
+    }
+    if (editPhotoName) editPhotoName.textContent = '';
+    document.getElementById('editPhotoFileInput').value = '';
     document.getElementById('editModal').classList.add('open');
   }
   function closeEdit() {
     document.getElementById('editModal').classList.remove('open');
   }
+  let editPhotoFile = null;
+  document.getElementById('editPhotoFileInput').addEventListener('change', function() {
+    if (!this.files || !this.files[0]) return;
+    editPhotoFile = this.files[0];
+    document.getElementById('editPhotoName').textContent = '✅ ' + editPhotoFile.name;
+    document.getElementById('editPhotoBtn').textContent = '📷 Změnit foto';
+    document.getElementById('editPhotoBtn').className = 'btn btn-sm btn-photo done';
+  });
+
   async function saveEdit() {
     const id       = document.getElementById('editId').value;
     const jmeno    = document.getElementById('editJmeno').value.trim();
@@ -510,13 +538,26 @@
     const mnozstvi = document.getElementById('editMnozstvi').value.trim();
     const cena     = document.getElementById('editCena').value.trim();
     if (!jmeno) { showMsg('editMsg', '❗ Jméno nesmí být prázdné.', 'error'); return; }
-    if (!co)    { showMsg('editMsg', '❗ Pole "Co přináší" nesmí být prázdné.', 'error'); return; }
+    if (!co)    { showMsg('editMsg', '❗ Pole "Položka" nesmí být prázdné.', 'error'); return; }
     try {
       const res  = await postData({ action:'editGift', code:currentCode, id, jmeno, co, mnozstvi, cena });
       const data = await res.json();
       if (data.ok) {
         const gift = currentGifts.find(g => g.id === id);
         if (gift) { gift.jmeno = jmeno; gift.co = co; gift.mnozstvi = mnozstvi; gift.cena = cena; }
+        // Upload foto pokud bylo vybráno
+        if (editPhotoFile) {
+          const prog = document.getElementById('editPhotoProgress');
+          if (prog) prog.classList.add('show');
+          try {
+            const base64 = await fileToBase64(editPhotoFile);
+            const pRes   = await postData({ action:'uploadPhoto', code:currentCode, id, content:base64, mimeType:editPhotoFile.type, fileName:editPhotoFile.name });
+            const pData  = await pRes.json();
+            if (pData.ok && gift) { gift.fotoUrl = pData.fotoUrl; gift.pripraveno = true; }
+          } catch (pe) { /* foto selhalo */ }
+          if (prog) prog.classList.remove('show');
+          editPhotoFile = null;
+        }
         renderGifts();
         closeEdit();
       } else {
@@ -574,17 +615,16 @@
 
     const rows = currentGifts.map(g => {
       const checked = g.pripraveno ? 'checked' : '';
-      const cenaText = g.cena ? escHtml(g.cena) + ' Kč' : '—';
+      const cenaText = (g.cena !== '' && g.cena !== null && g.cena !== undefined) ? escHtml(String(g.cena)) + ' Kč' : '—';
 
       const fotoCell = g.fotoUrl
         ? `<div class="thumb-wrap">
              <img class="thumb" src="${escAttr(g.fotoUrl)}" alt="foto" loading="lazy"
                   onclick="openLightbox('${escAttr(g.fotoUrl)}')">
-             <button class="btn btn-sm btn-photo done" id="photobtn_${g.id}" onclick="pickPhoto('${g.id}')">📷</button>
              <div class="upload-progress" id="progress_${g.id}"><div class="spinner"></div><span>…</span></div>
            </div>`
         : `<div class="thumb-wrap">
-             <button class="btn btn-sm btn-photo" id="photobtn_${g.id}" onclick="pickPhoto('${g.id}')">📷 Přidat foto</button>
+             <span style="color:#bdc3c7;font-size:11px;">bez foto</span>
              <div class="upload-progress" id="progress_${g.id}"><div class="spinner"></div><span>…</span></div>
            </div>`;
 
