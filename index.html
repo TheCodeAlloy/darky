@@ -275,7 +275,7 @@
 
     <!-- Formulář přidání -->
     <div id="addForm">
-      <h3>🎁 Co přineseš?</h3>
+      <h3>🎁 Jaký dárek zajistíte?</h3>
       <div class="input-group">
         <label>Tvoje jméno</label>
         <input type="text" id="newJmeno" placeholder="Jana Nováková" autocomplete="name">
@@ -355,7 +355,7 @@
     div.innerHTML = `
       <div class="input-group">
         <label>Co přineseš</label>
-        <input type="text" id="rowCo_${idx}" placeholder="Čokoláda, propiska…">
+        <input type="text" id="rowCo_${idx}" placeholder="Název / popis dárku">
       </div>
       <div class="input-group">
         <label>Množství</label>
@@ -574,6 +574,9 @@
         <td class="center">
           <button class="btn btn-sm btn-edit btn-icon" onclick="openEdit('${g.id}')" title="Upravit">✏️</button>
         </td>
+        <td class="center">
+          <button class="btn btn-sm btn-icon" style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;" onclick="deleteGift('${g.id}', '${escAttr(g.jmeno)}', '${escAttr(g.co)}')" title="Smazat">🗑️</button>
+        </td>
       </tr>`;
     }).join('');
 
@@ -582,12 +585,13 @@
         <table>
           <thead><tr>
             <th>Jméno</th>
-            <th>Co přináší</th>
+            <th>Položka</th>
             <th>Množství</th>
             <th>Cena</th>
             <th class="center">Připraveno</th>
             <th class="center">Foto</th>
             <th class="center">Úprava</th>
+            <th class="center">Smazat</th>
           </tr></thead>
           <tbody>${rows}</tbody>
         </table>
@@ -604,6 +608,21 @@
     document.getElementById('lightboxImg').src = '';
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeEdit(); } });
+
+  // ── Smazat dárek ──
+  async function deleteGift(id, jmeno, co) {
+    if (!confirm('Opravdu smazat záznam?\n\n' + jmeno + ' – ' + co)) return;
+    try {
+      const res  = await postData({ action:'deleteGift', code:currentCode, id });
+      const data = await res.json();
+      if (data.ok) {
+        currentGifts = currentGifts.filter(g => g.id !== id);
+        renderGifts();
+      } else {
+        alert('Chyba při mazání: ' + data.reason);
+      }
+    } catch (e) { alert('Chyba: ' + e.message); }
+  }
 
   // ── Helpers ──
   function postData(payload) {
