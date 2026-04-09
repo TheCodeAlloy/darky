@@ -5,24 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Erasmus – Dárky pro mobilitu</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      min-height: 100vh; padding: 20px;
-      display: flex; align-items: flex-start; justify-content: center;
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);
+      min-height:100vh; padding:20px;
+      display:flex; align-items:flex-start; justify-content:center;
     }
     .container {
-      background: rgba(255,255,255,0.97);
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      padding: 35px 36px; width: 100%; max-width: 1050px;
-      margin-top: 20px; animation: fadeUp .5s ease;
+      background:rgba(255,255,255,0.97);
+      border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.2);
+      padding:35px 36px; width:100%; max-width:1050px;
+      margin-top:20px; animation:fadeUp .5s ease;
     }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(25px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(25px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Hlavička */
     .header { text-align:center; margin-bottom:28px; }
     .header h1 { color:#1e3c72; font-size:24px; margin-bottom:6px; }
     .header p  { color:#7f8c8d; font-size:13px; }
@@ -31,6 +29,8 @@
       border-radius:20px; padding:4px 14px; font-size:12px; font-weight:600;
       margin-top:8px; text-transform:uppercase; letter-spacing:1px;
     }
+
+    /* Přihlášení */
     #loginSection { text-align:center; max-width:420px; margin:0 auto; }
     #loginSection h2 { color:#2c3e50; margin-bottom:20px; font-size:20px; }
     .input-group { margin-bottom:18px; text-align:left; }
@@ -41,6 +41,8 @@
       font-size:15px; transition:all .3s; background:#f8f9fa;
     }
     .input-group input:focus { outline:none; border-color:#3498db; background:#fff; box-shadow:0 0 0 3px rgba(52,152,219,.1); }
+
+    /* Tlačítka */
     .btn {
       display:inline-block; padding:13px 26px;
       border:none; border-radius:12px;
@@ -52,40 +54,60 @@
     .btn-primary { background:linear-gradient(135deg,#3498db,#2980b9); color:#fff; }
     .btn-success { background:linear-gradient(135deg,#27ae60,#219150); color:#fff; }
     .btn-block { width:100%; }
-    .btn-sm { padding:5px 12px; font-size:11px; border-radius:7px; text-transform:none; letter-spacing:0; font-weight:600; }
-    .btn-photo { background:linear-gradient(135deg,#8e44ad,#7d3c98); color:#fff; }
+    .btn-sm { padding:5px 11px; font-size:11px; border-radius:7px; text-transform:none; letter-spacing:0; font-weight:600; }
+    .btn-photo  { background:linear-gradient(135deg,#8e44ad,#7d3c98); color:#fff; }
     .btn-photo.done { background:linear-gradient(135deg,#27ae60,#219150); }
+    .btn-edit   { background:linear-gradient(135deg,#e67e22,#d35400); color:#fff; }
+    .btn-icon   { padding:4px 8px; font-size:13px; border-radius:6px; }
+
+    /* Zprávy */
     .msg {
       margin-top:16px; padding:12px 16px;
       border-radius:10px; font-size:13px; font-weight:600;
       text-align:center; display:none;
     }
-    .msg.show   { display:block; animation:fadeUp .3s ease; }
+    .msg.show   { display:block; }
     .msg.error  { background:#ffebee; color:#c0392b; border:1px solid #ffcdd2; }
     .msg.success{ background:#e8f5e9; color:#27ae60; border:1px solid #a5d6a7; }
     .msg.info   { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+
     #appSection { display:none; }
     .divider { border:none; border-top:1px solid #ecf0f1; margin:22px 0; }
+
+    /* Top bar */
     .top-bar {
       display:flex; align-items:center; justify-content:space-between;
       margin-bottom:18px; flex-wrap:wrap; gap:10px;
     }
     .top-bar-left { font-size:13px; color:#7f8c8d; }
-    .top-bar-right { display:flex; gap:10px; align-items:center; }
-    .logout-btn {
-      background:none; border:1px solid #ddd;
-      border-radius:8px; padding:6px 12px;
-      font-size:12px; color:#7f8c8d; cursor:pointer; transition:all .2s;
-    }
-    .logout-btn:hover { background:#f5f5f5; color:#c0392b; border-color:#c0392b; }
+
+    /* Formulář přidání */
     #addForm {
       background:#f8f9fa; border-radius:14px;
       padding:22px; margin-bottom:22px;
       border:2px solid #e0e6ed; display:none;
     }
     #addForm h3 { color:#2c3e50; margin-bottom:16px; font-size:16px; }
-    .form-row { display:flex; gap:12px; }
-    .form-row .input-group { flex:1; }
+    .form-row { display:flex; gap:12px; flex-wrap:wrap; }
+    .form-row .input-group { flex:1; min-width:120px; }
+
+    /* Modal editace */
+    #editModal {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.5); z-index:8000;
+      align-items:center; justify-content:center; padding:20px;
+    }
+    #editModal.open { display:flex; }
+    .modal-box {
+      background:#fff; border-radius:16px;
+      padding:28px; width:100%; max-width:480px;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+      animation:fadeUp .2s ease;
+    }
+    .modal-box h3 { color:#2c3e50; margin-bottom:18px; font-size:17px; }
+    .modal-actions { display:flex; gap:10px; margin-top:18px; }
+
+    /* Tabulka */
     .table-header {
       display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
     }
@@ -112,59 +134,100 @@
     .td-name { font-weight:700; color:#2c3e50; white-space:nowrap; }
     .td-what { color:#444; }
     .td-qty  { color:#666; white-space:nowrap; }
+    .td-cena { color:#27ae60; font-weight:600; white-space:nowrap; }
+
+    /* Checkbox připraveno – interaktivní */
     .check-wrap { display:flex; align-items:center; justify-content:center; }
-    .check-wrap input[type=checkbox] { width:18px; height:18px; cursor:default; accent-color:#27ae60; }
-    .thumb-wrap { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
+    .cb-pripraveno {
+      width:20px; height:20px; cursor:pointer;
+      accent-color:#27ae60; transition:transform .15s;
+    }
+    .cb-pripraveno:hover { transform:scale(1.2); }
+
+    /* Miniatura */
+    .thumb-wrap { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; }
     .thumb {
       width:48px; height:48px; object-fit:cover;
       border-radius:7px; border:2px solid #e0e6ed;
-      cursor:zoom-in; transition:transform .2s, box-shadow .2s; display:block;
+      cursor:zoom-in; transition:transform .2s, box-shadow .2s;
     }
     .thumb:hover { transform:scale(1.12); box-shadow:0 4px 12px rgba(0,0,0,.2); }
-    .upload-progress {
-      font-size:11px; color:#7f8c8d;
-      display:none; align-items:center; gap:5px;
-    }
+
+    /* Upload progress */
+    .upload-progress { font-size:11px; color:#7f8c8d; display:none; align-items:center; gap:5px; }
     .upload-progress.show { display:flex; }
     .spinner {
       width:12px; height:12px;
       border:2px solid #ddd; border-top-color:#3498db;
       border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0;
     }
-    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* Lightbox */
     #lightbox {
       display:none; position:fixed; inset:0;
       background:rgba(0,0,0,.85); z-index:9999;
       align-items:center; justify-content:center; cursor:zoom-out;
     }
-    #lightbox.open { display:flex; animation:fadeUp .2s ease; }
-    #lightbox img {
-      max-width:92vw; max-height:88vh;
-      border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6);
-    }
+    #lightbox.open { display:flex; }
+    #lightbox img { max-width:92vw; max-height:88vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
     #lightboxClose {
       position:fixed; top:18px; right:22px;
-      color:#fff; font-size:32px; cursor:pointer;
-      line-height:1; opacity:.8; transition:opacity .2s;
+      color:#fff; font-size:32px; cursor:pointer; line-height:1; opacity:.8;
     }
     #lightboxClose:hover { opacity:1; }
+
+    /* Prázdný stav */
     .empty-state { text-align:center; padding:40px 20px; color:#95a5a6; }
     .empty-state .icon { font-size:44px; margin-bottom:12px; }
     .empty-state p { font-size:14px; }
+
     .hidden-file { display:none; }
-    @media (max-width:600px) {
-      .container { padding:20px 12px; }
-      .form-row { flex-direction:column; gap:0; }
-      .header h1 { font-size:20px; }
-      td, th { padding:9px 8px; }
+    @media(max-width:600px){
+      .container{padding:20px 12px;}
+      .form-row{flex-direction:column;gap:0;}
+      .header h1{font-size:20px;}
+      td,th{padding:9px 8px;}
     }
   </style>
 </head>
 <body>
 
+<!-- Lightbox -->
 <div id="lightbox" onclick="closeLightbox()">
-  <span id="lightboxClose" onclick="closeLightbox()">✕</span>
+  <span id="lightboxClose">✕</span>
   <img id="lightboxImg" src="" alt="Foto dárku">
+</div>
+
+<!-- Modal editace -->
+<div id="editModal">
+  <div class="modal-box">
+    <h3>✏️ Upravit záznam</h3>
+    <input type="hidden" id="editId">
+    <div class="input-group">
+      <label>Jméno</label>
+      <input type="text" id="editJmeno">
+    </div>
+    <div class="input-group">
+      <label>Co přináší</label>
+      <input type="text" id="editCo">
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label>Množství</label>
+        <input type="text" id="editMnozstvi">
+      </div>
+      <div class="input-group">
+        <label>Cena (Kč)</label>
+        <input type="text" id="editCena">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-success" onclick="saveEdit()">Uložit</button>
+      <button class="btn" style="background:#ecf0f1;color:#555;" onclick="closeEdit()">Zrušit</button>
+    </div>
+    <div id="editMsg" class="msg"></div>
+  </div>
 </div>
 
 <div class="container">
@@ -175,6 +238,7 @@
     <div id="projectBadge" class="project-badge" style="display:none"></div>
   </div>
 
+  <!-- Přihlášení -->
   <div id="loginSection">
     <h2>Zadejte přístupový kód</h2>
     <div class="input-group" style="margin-top:20px">
@@ -183,22 +247,21 @@
     </div>
     <button class="btn btn-primary btn-block" onclick="login()">Pokračovat</button>
     <div id="loginMsg" class="msg"></div>
-    <p style="margin-top:20px; font-size:13px; color:#7f8c8d; line-height:1.6;">
+    <p style="margin-top:20px;font-size:13px;color:#7f8c8d;line-height:1.6;">
       Pokud přístupový kód neznáte nebo vám nefunguje přístup do systému,
       kontaktujte správce systému.
     </p>
   </div>
 
+  <!-- Aplikace -->
   <div id="appSection">
 
     <div class="top-bar">
       <div class="top-bar-left">Projekt: <strong id="projectLabel"></strong></div>
-      <div class="top-bar-right">
-        <button class="btn btn-success" style="padding:9px 20px;font-size:13px;" onclick="toggleAddForm()">＋ Přidat dárek</button>
-        <button class="logout-btn" onclick="logout()">← Jiný projekt</button>
-      </div>
+      <button class="btn btn-success" style="padding:9px 20px;font-size:13px;" onclick="toggleAddForm()">＋ Přidat dárek</button>
     </div>
 
+    <!-- Formulář přidání -->
     <div id="addForm">
       <h3>🎁 Co přineseš?</h3>
       <div class="input-group">
@@ -214,16 +277,20 @@
           <label>Množství / počet</label>
           <input type="text" id="newMnozstvi" placeholder="5 ks">
         </div>
+        <div class="input-group">
+          <label>Cena (Kč)</label>
+          <input type="text" id="newCena" placeholder="0 = zdarma">
+        </div>
       </div>
       <button class="btn btn-success" onclick="addGift()" id="addGiftBtn">Uložit</button>
       <div id="addMsg" class="msg"></div>
     </div>
 
+    <!-- Tabulka -->
     <div class="table-header">
       <h3>📋 Přehled dárků</h3>
       <span class="gifts-count" id="giftsCount">0 položek</span>
     </div>
-
     <div id="giftsList"></div>
 
   </div>
@@ -232,12 +299,13 @@
 <input type="file" id="photoInput" class="hidden-file" accept="image/*" capture="environment">
 
 <script>
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuaLP_BxX4cJjY4pGI-lg9msH0izGggcKcGxvqb31DeUmb0WwgXC5qzUSBS76aN5kFzw/exec';
+  const GAS_URL = 'VLOZ_SEM_URL_SVEHO_GAS_WEBAPPU';
 
-  let currentCode  = '';
-  let currentGifts = [];
+  let currentCode    = '';
+  let currentGifts   = [];
   let pendingPhotoId = null;
 
+  // ── Přihlášení ──
   async function login() {
     const code = document.getElementById('codeInput').value.trim().toLowerCase();
     if (!code) { showMsg('loginMsg', '❗ Zadejte přístupový kód.', 'error'); return; }
@@ -262,38 +330,36 @@
     }
   }
 
-  function logout() {
-    currentCode = ''; currentGifts = [];
-    document.getElementById('codeInput').value = '';
-    document.getElementById('loginSection').style.display = 'block';
-    document.getElementById('appSection').style.display   = 'none';
-    document.getElementById('projectBadge').style.display = 'none';
-    document.getElementById('addForm').style.display      = 'none';
+  // Hláška zmizí až při psaní nového kódu
+  document.getElementById('codeInput').addEventListener('input', () => {
     hideMsg('loginMsg');
-  }
+  });
+  document.getElementById('codeInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
 
   function toggleAddForm() {
     const f = document.getElementById('addForm');
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
   }
 
+  // ── Přidat dárek ──
   async function addGift() {
     const jmeno    = document.getElementById('newJmeno').value.trim();
     const co       = document.getElementById('newCo').value.trim();
     const mnozstvi = document.getElementById('newMnozstvi').value.trim();
+    const cena     = document.getElementById('newCena').value.trim();
     if (!jmeno) { showMsg('addMsg', '❗ Zadej své jméno.', 'error'); return; }
     if (!co)    { showMsg('addMsg', '❗ Zadej co přineseš.', 'error'); return; }
     const btn = document.getElementById('addGiftBtn');
     btn.disabled = true; btn.textContent = 'Ukládám…';
     try {
-      const res  = await postData({ action:'addGift', code:currentCode, jmeno, co, mnozstvi });
+      const res  = await postData({ action:'addGift', code:currentCode, jmeno, co, mnozstvi, cena });
       const data = await res.json();
       if (data.ok) {
-        currentGifts.push({ id:data.id, jmeno, co, mnozstvi, pripraveno:false, fotoUrl:'', timestamp:dnes() });
+        currentGifts.push({ id:data.id, jmeno, co, mnozstvi, cena, pripraveno:false, fotoUrl:'', timestamp:dnes() });
         renderGifts();
-        document.getElementById('newJmeno').value    = '';
-        document.getElementById('newCo').value       = '';
-        document.getElementById('newMnozstvi').value = '';
+        ['newJmeno','newCo','newMnozstvi','newCena'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('addForm').style.display = 'none';
         showMsg('addMsg', '✅ Uloženo!', 'success');
       } else {
@@ -303,6 +369,65 @@
     btn.disabled = false; btn.textContent = 'Uložit';
   }
 
+  // ── Toggle připraveno ──
+  async function togglePripraveno(id) {
+    const cb   = document.getElementById('cb_' + id);
+    const gift = currentGifts.find(g => g.id === id);
+    if (!gift) return;
+    cb.disabled = true;
+    try {
+      const res  = await postData({ action:'togglePripraveno', code:currentCode, id });
+      const data = await res.json();
+      if (data.ok) {
+        gift.pripraveno = data.pripraveno;
+        cb.checked  = data.pripraveno;
+      } else {
+        cb.checked = gift.pripraveno; // vrátit zpět při chybě
+      }
+    } catch (e) {
+      cb.checked = gift.pripraveno;
+    }
+    cb.disabled = false;
+  }
+
+  // ── Editace ──
+  function openEdit(id) {
+    const g = currentGifts.find(g => g.id === id);
+    if (!g) return;
+    document.getElementById('editId').value       = id;
+    document.getElementById('editJmeno').value    = g.jmeno;
+    document.getElementById('editCo').value       = g.co;
+    document.getElementById('editMnozstvi').value = g.mnozstvi || '';
+    document.getElementById('editCena').value     = g.cena     || '';
+    hideMsg('editMsg');
+    document.getElementById('editModal').classList.add('open');
+  }
+  function closeEdit() {
+    document.getElementById('editModal').classList.remove('open');
+  }
+  async function saveEdit() {
+    const id       = document.getElementById('editId').value;
+    const jmeno    = document.getElementById('editJmeno').value.trim();
+    const co       = document.getElementById('editCo').value.trim();
+    const mnozstvi = document.getElementById('editMnozstvi').value.trim();
+    const cena     = document.getElementById('editCena').value.trim();
+    if (!jmeno) { showMsg('editMsg', '❗ Jméno nesmí být prázdné.', 'error'); return; }
+    if (!co)    { showMsg('editMsg', '❗ Pole "Co přináší" nesmí být prázdné.', 'error'); return; }
+    try {
+      const res  = await postData({ action:'editGift', code:currentCode, id, jmeno, co, mnozstvi, cena });
+      const data = await res.json();
+      if (data.ok) {
+        const gift = currentGifts.find(g => g.id === id);
+        if (gift) { gift.jmeno = jmeno; gift.co = co; gift.mnozstvi = mnozstvi; gift.cena = cena; }
+        renderGifts();
+        closeEdit();
+      } else {
+        showMsg('editMsg', '❌ Chyba: ' + data.reason, 'error');
+      }
+    } catch (e) { showMsg('editMsg', '❌ ' + e.message, 'error'); }
+  }
+
+  // ── Foto ──
   function pickPhoto(id) {
     pendingPhotoId = id;
     const input = document.getElementById('photoInput');
@@ -338,6 +463,7 @@
     }
   });
 
+  // ── Render tabulky ──
   function renderGifts() {
     const list  = document.getElementById('giftsList');
     const count = document.getElementById('giftsCount');
@@ -350,9 +476,12 @@
 
     const rows = currentGifts.map(g => {
       const checked = g.pripraveno ? 'checked' : '';
+      const cenaText = g.cena ? escHtml(g.cena) + ' Kč' : '—';
+
       const fotoCell = g.fotoUrl
         ? `<div class="thumb-wrap">
-             <img class="thumb" src="${g.fotoUrl}" alt="foto" loading="lazy" onclick="openLightbox('${escAttr(g.fotoUrl)}')">
+             <img class="thumb" src="${escAttr(g.fotoUrl)}" alt="foto" loading="lazy"
+                  onclick="openLightbox('${escAttr(g.fotoUrl)}')">
              <button class="btn btn-sm btn-photo done" id="photobtn_${g.id}" onclick="pickPhoto('${g.id}')">📷</button>
              <div class="upload-progress" id="progress_${g.id}"><div class="spinner"></div><span>…</span></div>
            </div>`
@@ -365,8 +494,17 @@
         <td class="td-name">${escHtml(g.jmeno)}</td>
         <td class="td-what">${escHtml(g.co)}</td>
         <td class="td-qty">${escHtml(g.mnozstvi || '—')}</td>
-        <td class="center"><div class="check-wrap"><input type="checkbox" ${checked} disabled></div></td>
+        <td class="td-cena">${cenaText}</td>
+        <td class="center">
+          <div class="check-wrap">
+            <input type="checkbox" class="cb-pripraveno" id="cb_${g.id}"
+                   ${checked} onchange="togglePripraveno('${g.id}')">
+          </div>
+        </td>
         <td class="center">${fotoCell}</td>
+        <td class="center">
+          <button class="btn btn-sm btn-edit btn-icon" onclick="openEdit('${g.id}')" title="Upravit">✏️</button>
+        </td>
       </tr>`;
     }).join('');
 
@@ -377,14 +515,17 @@
             <th>Jméno</th>
             <th>Co přináší</th>
             <th>Množství</th>
+            <th>Cena</th>
             <th class="center">Připraveno</th>
-            <th class="center">Foto / Akce</th>
+            <th class="center">Foto</th>
+            <th class="center">Úprava</th>
           </tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;
   }
 
+  // ── Lightbox ──
   function openLightbox(url) {
     document.getElementById('lightboxImg').src = url;
     document.getElementById('lightbox').classList.add('open');
@@ -393,8 +534,9 @@
     document.getElementById('lightbox').classList.remove('open');
     document.getElementById('lightboxImg').src = '';
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeEdit(); } });
 
+  // ── Helpers ──
   function postData(payload) {
     return fetch(GAS_URL, {
       method:'POST', headers:{'Content-Type':'text/plain'},
@@ -412,14 +554,13 @@
   function showMsg(id, text, type) {
     const el = document.getElementById(id);
     el.textContent = text; el.className = 'msg ' + type + ' show';
-    setTimeout(() => el.classList.remove('show'), 5000);
+    // bez auto-hide pro loginMsg
+    if (id !== 'loginMsg') setTimeout(() => el.classList.remove('show'), 5000);
   }
   function hideMsg(id) { document.getElementById(id).className = 'msg'; }
   function escHtml(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function escAttr(s)  { return String(s||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
   function dnes()      { return new Date().toLocaleDateString('cs-CZ'); }
-
-  document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key==='Enter') login(); });
 </script>
 </body>
 </html>
