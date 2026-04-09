@@ -6,239 +6,197 @@
   <title>Erasmus – Dárky pro mobilitu</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      min-height: 100vh; padding: 20px;
+      display: flex; align-items: flex-start; justify-content: center;
     }
-
     .container {
       background: rgba(255,255,255,0.97);
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      padding: 35px 30px;
-      width: 100%;
-      max-width: 650px;
-      margin-top: 20px;
-      animation: fadeUp .5s ease;
+      padding: 35px 36px; width: 100%; max-width: 1050px;
+      margin-top: 20px; animation: fadeUp .5s ease;
     }
-
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(25px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(25px); }
+      to   { opacity:1; transform:translateY(0); }
     }
-
-    /* ── Hlavička ── */
-    .header { text-align: center; margin-bottom: 28px; }
-    .header h1 { color: #1e3c72; font-size: 24px; margin-bottom: 6px; }
-    .header p  { color: #7f8c8d; font-size: 13px; }
+    .header { text-align:center; margin-bottom:28px; }
+    .header h1 { color:#1e3c72; font-size:24px; margin-bottom:6px; }
+    .header p  { color:#7f8c8d; font-size:13px; }
     .project-badge {
-      display: inline-block;
-      background: #eaf3fb;
-      color: #2a5298;
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      display:inline-block; background:#eaf3fb; color:#2a5298;
+      border-radius:20px; padding:4px 14px; font-size:12px; font-weight:600;
+      margin-top:8px; text-transform:uppercase; letter-spacing:1px;
     }
-
-    /* ── Přihlášení ── */
-    #loginSection { text-align: center; }
-    #loginSection h2 { color: #2c3e50; margin-bottom: 20px; font-size: 20px; }
-
-    .input-group { margin-bottom: 18px; text-align: left; }
-    .input-group label { display: block; margin-bottom: 6px; color: #34495e; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    #loginSection { text-align:center; max-width:420px; margin:0 auto; }
+    #loginSection h2 { color:#2c3e50; margin-bottom:20px; font-size:20px; }
+    .input-group { margin-bottom:18px; text-align:left; }
+    .input-group label { display:block; margin-bottom:6px; color:#34495e; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
     .input-group input {
-      width: 100%; padding: 14px 18px;
-      border: 2px solid #e0e6ed; border-radius: 12px;
-      font-size: 15px; transition: all .3s;
-      background: #f8f9fa;
+      width:100%; padding:14px 18px;
+      border:2px solid #e0e6ed; border-radius:12px;
+      font-size:15px; transition:all .3s; background:#f8f9fa;
     }
-    .input-group input:focus { outline: none; border-color: #3498db; background: #fff; box-shadow: 0 0 0 3px rgba(52,152,219,.1); }
-
-    /* ── Tlačítka ── */
+    .input-group input:focus { outline:none; border-color:#3498db; background:#fff; box-shadow:0 0 0 3px rgba(52,152,219,.1); }
     .btn {
-      display: inline-block; padding: 14px 28px;
-      border: none; border-radius: 12px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
-      transition: all .25s; text-transform: uppercase; letter-spacing: .5px;
+      display:inline-block; padding:13px 26px;
+      border:none; border-radius:12px;
+      font-size:14px; font-weight:600; cursor:pointer;
+      transition:all .25s; text-transform:uppercase; letter-spacing:.5px;
     }
-    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
-    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-    .btn-primary { background: linear-gradient(135deg,#3498db,#2980b9); color: #fff; }
-    .btn-success { background: linear-gradient(135deg,#27ae60,#219150); color: #fff; }
-    .btn-block    { width: 100%; }
-    .btn-sm       { padding: 8px 16px; font-size: 12px; border-radius: 8px; }
-    .btn-photo    { background: linear-gradient(135deg,#8e44ad,#7d3c98); color: #fff; }
-    .btn-photo.done { background: linear-gradient(135deg,#27ae60,#219150); }
-
-    /* ── Zprávy ── */
+    .btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.15); }
+    .btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+    .btn-primary { background:linear-gradient(135deg,#3498db,#2980b9); color:#fff; }
+    .btn-success { background:linear-gradient(135deg,#27ae60,#219150); color:#fff; }
+    .btn-block { width:100%; }
+    .btn-sm { padding:5px 12px; font-size:11px; border-radius:7px; text-transform:none; letter-spacing:0; font-weight:600; }
+    .btn-photo { background:linear-gradient(135deg,#8e44ad,#7d3c98); color:#fff; }
+    .btn-photo.done { background:linear-gradient(135deg,#27ae60,#219150); }
     .msg {
-      margin-top: 16px; padding: 12px 16px;
-      border-radius: 10px; font-size: 13px; font-weight: 600;
-      text-align: center; display: none;
+      margin-top:16px; padding:12px 16px;
+      border-radius:10px; font-size:13px; font-weight:600;
+      text-align:center; display:none;
     }
-    .msg.show   { display: block; animation: fadeUp .3s ease; }
-    .msg.error  { background: #ffebee; color: #c0392b; border: 1px solid #ffcdd2; }
-    .msg.success{ background: #e8f5e9; color: #27ae60; border: 1px solid #a5d6a7; }
-    .msg.info   { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
-
-    /* ── Sekce aplikace (po přihlášení) ── */
-    #appSection { display: none; }
-
-    /* ── Oddělovač ── */
-    .divider { border: none; border-top: 1px solid #ecf0f1; margin: 24px 0; }
-
-    /* ── Formulář pro přidání dárku ── */
-    .add-form-toggle {
-      text-align: center; margin-bottom: 20px;
+    .msg.show   { display:block; animation:fadeUp .3s ease; }
+    .msg.error  { background:#ffebee; color:#c0392b; border:1px solid #ffcdd2; }
+    .msg.success{ background:#e8f5e9; color:#27ae60; border:1px solid #a5d6a7; }
+    .msg.info   { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+    #appSection { display:none; }
+    .divider { border:none; border-top:1px solid #ecf0f1; margin:22px 0; }
+    .top-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:18px; flex-wrap:wrap; gap:10px;
     }
-    #addForm {
-      background: #f8f9fa; border-radius: 14px;
-      padding: 22px; margin-bottom: 24px;
-      border: 2px solid #e0e6ed;
-      display: none;
-    }
-    #addForm h3 { color: #2c3e50; margin-bottom: 16px; font-size: 16px; }
-    .form-row { display: flex; gap: 12px; }
-    .form-row .input-group { flex: 1; }
-
-    /* ── Tabulka dárků ── */
-    .gifts-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .gifts-header h3 { color: #2c3e50; font-size: 17px; }
-    .gifts-count {
-      background: #eaf3fb; color: #2a5298;
-      border-radius: 20px; padding: 3px 12px;
-      font-size: 12px; font-weight: 600;
-    }
-
-    .gift-card {
-      background: #fff; border: 1px solid #e8ecf0;
-      border-radius: 14px; padding: 16px;
-      margin-bottom: 12px; transition: box-shadow .2s;
-    }
-    .gift-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-
-    .gift-top {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; gap: 10px;
-    }
-    .gift-info { flex: 1; }
-    .gift-name { font-weight: 700; color: #2c3e50; font-size: 15px; margin-bottom: 3px; }
-    .gift-what { color: #555; font-size: 14px; }
-    .gift-qty  { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
-
-    .gift-status {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; font-weight: 600; padding: 4px 10px;
-      border-radius: 20px; white-space: nowrap;
-    }
-    .status-waiting { background: #fff3e0; color: #e67e22; }
-    .status-ready   { background: #e8f5e9; color: #27ae60; }
-
-    .gift-bottom { margin-top: 12px; display: flex; align-items: center; gap: 12px; }
-
-    .gift-photo img {
-      width: 100%; max-width: 300px;
-      border-radius: 10px; margin-top: 12px;
-      border: 2px solid #e0e6ed;
-      display: block;
-    }
-
-    /* ── Nahrávání ── */
-    .upload-progress {
-      font-size: 12px; color: #7f8c8d;
-      display: none; align-items: center; gap: 6px;
-    }
-    .upload-progress.show { display: flex; }
-    .spinner {
-      width: 14px; height: 14px;
-      border: 2px solid #ddd; border-top-color: #3498db;
-      border-radius: 50%; animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Prázdný stav ── */
-    .empty-state {
-      text-align: center; padding: 40px 20px; color: #95a5a6;
-    }
-    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; }
-
-    /* ── Odhlášení ── */
-    .logout-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px;
-    }
+    .top-bar-left { font-size:13px; color:#7f8c8d; }
+    .top-bar-right { display:flex; gap:10px; align-items:center; }
     .logout-btn {
-      background: none; border: 1px solid #ddd;
-      border-radius: 8px; padding: 6px 12px;
-      font-size: 12px; color: #7f8c8d; cursor: pointer;
-      transition: all .2s;
+      background:none; border:1px solid #ddd;
+      border-radius:8px; padding:6px 12px;
+      font-size:12px; color:#7f8c8d; cursor:pointer; transition:all .2s;
     }
-    .logout-btn:hover { background: #f5f5f5; color: #c0392b; border-color: #c0392b; }
-
-    @media (max-width: 480px) {
-      .container { padding: 24px 16px; }
-      .form-row  { flex-direction: column; gap: 0; }
-      .header h1 { font-size: 20px; }
+    .logout-btn:hover { background:#f5f5f5; color:#c0392b; border-color:#c0392b; }
+    #addForm {
+      background:#f8f9fa; border-radius:14px;
+      padding:22px; margin-bottom:22px;
+      border:2px solid #e0e6ed; display:none;
     }
-
-    /* Skrytý file input */
-    .hidden-file { display: none; }
+    #addForm h3 { color:#2c3e50; margin-bottom:16px; font-size:16px; }
+    .form-row { display:flex; gap:12px; }
+    .form-row .input-group { flex:1; }
+    .table-header {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+    }
+    .table-header h3 { color:#2c3e50; font-size:16px; }
+    .gifts-count {
+      background:#eaf3fb; color:#2a5298;
+      border-radius:20px; padding:3px 12px; font-size:12px; font-weight:600;
+    }
+    .gifts-table-wrap { overflow-x:auto; border-radius:12px; border:1px solid #e8ecf0; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    thead tr { background:#f0f4f8; }
+    thead th {
+      padding:12px 14px; text-align:left;
+      color:#5a6a7a; font-size:11px; font-weight:700;
+      text-transform:uppercase; letter-spacing:.6px;
+      border-bottom:2px solid #e0e6ed; white-space:nowrap;
+    }
+    thead th.center { text-align:center; }
+    tbody tr { border-bottom:1px solid #f0f2f5; transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:#fafbfc; }
+    td { padding:11px 14px; vertical-align:middle; }
+    td.center { text-align:center; }
+    .td-name { font-weight:700; color:#2c3e50; white-space:nowrap; }
+    .td-what { color:#444; }
+    .td-qty  { color:#666; white-space:nowrap; }
+    .check-wrap { display:flex; align-items:center; justify-content:center; }
+    .check-wrap input[type=checkbox] { width:18px; height:18px; cursor:default; accent-color:#27ae60; }
+    .thumb-wrap { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
+    .thumb {
+      width:48px; height:48px; object-fit:cover;
+      border-radius:7px; border:2px solid #e0e6ed;
+      cursor:zoom-in; transition:transform .2s, box-shadow .2s; display:block;
+    }
+    .thumb:hover { transform:scale(1.12); box-shadow:0 4px 12px rgba(0,0,0,.2); }
+    .upload-progress {
+      font-size:11px; color:#7f8c8d;
+      display:none; align-items:center; gap:5px;
+    }
+    .upload-progress.show { display:flex; }
+    .spinner {
+      width:12px; height:12px;
+      border:2px solid #ddd; border-top-color:#3498db;
+      border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    #lightbox {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.85); z-index:9999;
+      align-items:center; justify-content:center; cursor:zoom-out;
+    }
+    #lightbox.open { display:flex; animation:fadeUp .2s ease; }
+    #lightbox img {
+      max-width:92vw; max-height:88vh;
+      border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    #lightboxClose {
+      position:fixed; top:18px; right:22px;
+      color:#fff; font-size:32px; cursor:pointer;
+      line-height:1; opacity:.8; transition:opacity .2s;
+    }
+    #lightboxClose:hover { opacity:1; }
+    .empty-state { text-align:center; padding:40px 20px; color:#95a5a6; }
+    .empty-state .icon { font-size:44px; margin-bottom:12px; }
+    .empty-state p { font-size:14px; }
+    .hidden-file { display:none; }
+    @media (max-width:600px) {
+      .container { padding:20px 12px; }
+      .form-row { flex-direction:column; gap:0; }
+      .header h1 { font-size:20px; }
+      td, th { padding:9px 8px; }
+    }
   </style>
 </head>
 <body>
+
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightboxClose" onclick="closeLightbox()">✕</span>
+  <img id="lightboxImg" src="" alt="Foto dárku">
+</div>
+
 <div class="container">
 
-  <!-- ═══ HLAVIČKA ═══ -->
   <div class="header">
     <h1>🎁 Erasmus Dárky</h1>
     <p>Systém koordinace dárků pro mobility</p>
     <div id="projectBadge" class="project-badge" style="display:none"></div>
   </div>
 
-  <!-- ═══ PŘIHLÁŠENÍ ═══ -->
   <div id="loginSection">
     <h2>Zadejte přístupový kód</h2>
     <div class="input-group" style="margin-top:20px">
       <input type="text" id="codeInput" placeholder="např. berlin2025"
              autocomplete="off" autocapitalize="off">
     </div>
-    <button class="btn btn-primary btn-block" onclick="login()">
-      Pokračovat
-    </button>
+    <button class="btn btn-primary btn-block" onclick="login()">Pokračovat</button>
     <div id="loginMsg" class="msg"></div>
-    <p style="margin-top:20px; font-size:13px; color:#7f8c8d; text-align:center; line-height:1.6;">
-      Pokud přístupový kód neznáte nebo vám nefunguje přístup do systému,<br>
+    <p style="margin-top:20px; font-size:13px; color:#7f8c8d; line-height:1.6;">
+      Pokud přístupový kód neznáte nebo vám nefunguje přístup do systému,
       kontaktujte správce systému.
     </p>
   </div>
 
-  <!-- ═══ APLIKACE (zobrazí se po přihlášení) ═══ -->
   <div id="appSection">
 
-    <div class="logout-bar">
-      <span style="font-size:13px;color:#7f8c8d;">Projekt: <strong id="projectLabel"></strong></span>
-      <button class="logout-btn" onclick="logout()">← Jiný projekt</button>
-    </div>
-
-    <!-- Přidat dárek -->
-    <div class="add-form-toggle">
-      <button class="btn btn-success" onclick="toggleAddForm()">
-        ＋ Přidat dárek
-      </button>
+    <div class="top-bar">
+      <div class="top-bar-left">Projekt: <strong id="projectLabel"></strong></div>
+      <div class="top-bar-right">
+        <button class="btn btn-success" style="padding:9px 20px;font-size:13px;" onclick="toggleAddForm()">＋ Přidat dárek</button>
+        <button class="logout-btn" onclick="logout()">← Jiný projekt</button>
+      </div>
     </div>
 
     <div id="addForm">
@@ -257,52 +215,36 @@
           <input type="text" id="newMnozstvi" placeholder="5 ks">
         </div>
       </div>
-      <button class="btn btn-success" onclick="addGift()" id="addGiftBtn">
-        Uložit
-      </button>
+      <button class="btn btn-success" onclick="addGift()" id="addGiftBtn">Uložit</button>
       <div id="addMsg" class="msg"></div>
     </div>
 
-    <hr class="divider">
-
-    <!-- Seznam dárků -->
-    <div class="gifts-header">
+    <div class="table-header">
       <h3>📋 Přehled dárků</h3>
       <span class="gifts-count" id="giftsCount">0 položek</span>
     </div>
 
     <div id="giftsList"></div>
 
-  </div><!-- /appSection -->
+  </div>
+</div>
 
-</div><!-- /container -->
-
-<!-- Skrytý file input pro fotky (jeden pro celou stránku) -->
-<input type="file" id="photoInput" class="hidden-file"
-       accept="image/*" capture="environment">
+<input type="file" id="photoInput" class="hidden-file" accept="image/*" capture="environment">
 
 <script>
-  // ══════════════════════════════════════════════
-  //  KONFIGURACE – sem vlož URL svého GAS Web Appu
-  // ══════════════════════════════════════════════
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuaLP_BxX4cJjY4pGI-lg9msH0izGggcKcGxvqb31DeUmb0WwgXC5qzUSBS76aN5kFzw/exec';
+  const GAS_URL = 'VLOZ_SEM_URL_SVEHO_GAS_WEBAPPU';
 
-  // ── Stav aplikace ──
-  let currentCode = '';
+  let currentCode  = '';
   let currentGifts = [];
-  let pendingPhotoId = null; // ID záznamu čekajícího na fotku
+  let pendingPhotoId = null;
 
-  // ── Přihlášení ──
   async function login() {
     const code = document.getElementById('codeInput').value.trim().toLowerCase();
-    if (!code) { showMsg('loginMsg', '❗ Zadejte kód projektu.', 'error'); return; }
-
+    if (!code) { showMsg('loginMsg', '❗ Zadejte přístupový kód.', 'error'); return; }
     showMsg('loginMsg', '⏳ Ověřuji kód…', 'info');
-
     try {
       const res  = await fetch(GAS_URL + '?code=' + encodeURIComponent(code));
       const data = await res.json();
-
       if (data.ok) {
         currentCode  = code;
         currentGifts = data.gifts || [];
@@ -313,17 +255,15 @@
         document.getElementById('projectBadge').style.display = 'inline-block';
         renderGifts();
       } else {
-        showMsg('loginMsg', '❌ Neplatný kód projektu.', 'error');
+        showMsg('loginMsg', '❌ Neplatný přístupový kód.', 'error');
       }
     } catch (e) {
       showMsg('loginMsg', '❌ Chyba připojení: ' + e.message, 'error');
     }
   }
 
-  // ── Odhlášení ──
   function logout() {
-    currentCode  = '';
-    currentGifts = [];
+    currentCode = ''; currentGifts = [];
     document.getElementById('codeInput').value = '';
     document.getElementById('loginSection').style.display = 'block';
     document.getElementById('appSection').style.display   = 'none';
@@ -332,34 +272,24 @@
     hideMsg('loginMsg');
   }
 
-  // ── Zobrazit / skrýt formulář ──
   function toggleAddForm() {
     const f = document.getElementById('addForm');
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
   }
 
-  // ── Přidat dárek ──
   async function addGift() {
     const jmeno    = document.getElementById('newJmeno').value.trim();
     const co       = document.getElementById('newCo').value.trim();
     const mnozstvi = document.getElementById('newMnozstvi').value.trim();
-
     if (!jmeno) { showMsg('addMsg', '❗ Zadej své jméno.', 'error'); return; }
     if (!co)    { showMsg('addMsg', '❗ Zadej co přineseš.', 'error'); return; }
-
     const btn = document.getElementById('addGiftBtn');
     btn.disabled = true; btn.textContent = 'Ukládám…';
-
     try {
-      const res  = await postData({ action: 'addGift', code: currentCode, jmeno, co, mnozstvi });
+      const res  = await postData({ action:'addGift', code:currentCode, jmeno, co, mnozstvi });
       const data = await res.json();
-
       if (data.ok) {
-        // Přidej záznam lokálně a znovu vyrenderuj
-        currentGifts.push({
-          id: data.id, jmeno, co, mnozstvi,
-          pripraveno: false, fotoUrl: '', timestamp: dnes()
-        });
+        currentGifts.push({ id:data.id, jmeno, co, mnozstvi, pripraveno:false, fotoUrl:'', timestamp:dnes() });
         renderGifts();
         document.getElementById('newJmeno').value    = '';
         document.getElementById('newCo').value       = '';
@@ -369,56 +299,32 @@
       } else {
         showMsg('addMsg', '❌ Chyba: ' + data.reason, 'error');
       }
-    } catch (e) {
-      showMsg('addMsg', '❌ ' + e.message, 'error');
-    }
-
+    } catch (e) { showMsg('addMsg', '❌ ' + e.message, 'error'); }
     btn.disabled = false; btn.textContent = 'Uložit';
   }
 
-  // ── Spustit výběr fotky pro konkrétní ID ──
   function pickPhoto(id) {
     pendingPhotoId = id;
     const input = document.getElementById('photoInput');
-    input.value = '';
-    input.click();
+    input.value = ''; input.click();
   }
 
-  // ── Zpracování vybrané fotky ──
   document.getElementById('photoInput').addEventListener('change', async function() {
     if (!this.files || !this.files[0] || !pendingPhotoId) return;
-
     const file = this.files[0];
     const id   = pendingPhotoId;
     pendingPhotoId = null;
-
-    // Zobraz progress
     const progressEl = document.getElementById('progress_' + id);
     const photoBtn   = document.getElementById('photobtn_' + id);
     if (progressEl) progressEl.classList.add('show');
     if (photoBtn)   photoBtn.disabled = true;
-
     try {
-      // Převeď na base64
       const base64 = await fileToBase64(file);
-
-      const res  = await postData({
-        action:   'uploadPhoto',
-        code:     currentCode,
-        id:       id,
-        content:  base64,
-        mimeType: file.type,
-        fileName: file.name
-      });
-      const data = await res.json();
-
+      const res    = await postData({ action:'uploadPhoto', code:currentCode, id, content:base64, mimeType:file.type, fileName:file.name });
+      const data   = await res.json();
       if (data.ok) {
-        // Aktualizuj lokální data
         const gift = currentGifts.find(g => g.id === id);
-        if (gift) {
-          gift.pripraveno = true;
-          gift.fotoUrl    = data.fotoUrl;
-        }
+        if (gift) { gift.pripraveno = true; gift.fotoUrl = data.fotoUrl; }
         renderGifts();
       } else {
         alert('Chyba při nahrávání: ' + data.reason);
@@ -432,100 +338,88 @@
     }
   });
 
-  // ── Vykreslit seznam dárků ──
   function renderGifts() {
     const list  = document.getElementById('giftsList');
     const count = document.getElementById('giftsCount');
     count.textContent = currentGifts.length + ' položek';
 
     if (currentGifts.length === 0) {
-      list.innerHTML = `
-        <div class="empty-state">
-          <div class="icon">🎁</div>
-          <p>Zatím žádné dárky.<br>Buď první kdo přispěje!</p>
-        </div>`;
+      list.innerHTML = '<div class="empty-state"><div class="icon">🎁</div><p>Zatím žádné dárky.<br>Buď první kdo přispěje!</p></div>';
       return;
     }
 
-    list.innerHTML = currentGifts.map(g => {
-      const statusClass = g.pripraveno ? 'status-ready' : 'status-waiting';
-      const statusText  = g.pripraveno ? '✅ Připraveno' : '⏳ Čeká';
-      const photoBtnClass = g.pripraveno ? 'btn-photo done' : 'btn-photo';
-      const photoBtnText  = g.pripraveno ? '📷 Změnit foto' : '📷 Přidat fotku';
+    const rows = currentGifts.map(g => {
+      const checked = g.pripraveno ? 'checked' : '';
+      const fotoCell = g.fotoUrl
+        ? `<div class="thumb-wrap">
+             <img class="thumb" src="${g.fotoUrl}" alt="foto" loading="lazy" onclick="openLightbox('${escAttr(g.fotoUrl)}')">
+             <button class="btn btn-sm btn-photo done" id="photobtn_${g.id}" onclick="pickPhoto('${g.id}')">📷</button>
+             <div class="upload-progress" id="progress_${g.id}"><div class="spinner"></div><span>…</span></div>
+           </div>`
+        : `<div class="thumb-wrap">
+             <button class="btn btn-sm btn-photo" id="photobtn_${g.id}" onclick="pickPhoto('${g.id}')">📷 Přidat foto</button>
+             <div class="upload-progress" id="progress_${g.id}"><div class="spinner"></div><span>…</span></div>
+           </div>`;
 
-      const fotoHtml = g.fotoUrl
-        ? `<div class="gift-photo"><img src="${g.fotoUrl}" alt="Foto dárku" loading="lazy"></div>`
-        : '';
-
-      return `
-        <div class="gift-card" id="card_${g.id}">
-          <div class="gift-top">
-            <div class="gift-info">
-              <div class="gift-name">${escHtml(g.jmeno)}</div>
-              <div class="gift-what">${escHtml(g.co)}</div>
-              ${g.mnozstvi ? `<div class="gift-qty">Množství: ${escHtml(g.mnozstvi)}</div>` : ''}
-            </div>
-            <span class="gift-status ${statusClass}">${statusText}</span>
-          </div>
-          <div class="gift-bottom">
-            <button class="btn btn-sm ${photoBtnClass}"
-                    id="photobtn_${g.id}"
-                    onclick="pickPhoto('${g.id}')">
-              ${photoBtnText}
-            </button>
-            <div class="upload-progress" id="progress_${g.id}">
-              <div class="spinner"></div>
-              <span>Nahrávám…</span>
-            </div>
-          </div>
-          ${fotoHtml}
-        </div>`;
+      return `<tr id="card_${g.id}">
+        <td class="td-name">${escHtml(g.jmeno)}</td>
+        <td class="td-what">${escHtml(g.co)}</td>
+        <td class="td-qty">${escHtml(g.mnozstvi || '—')}</td>
+        <td class="center"><div class="check-wrap"><input type="checkbox" ${checked} disabled></div></td>
+        <td class="center">${fotoCell}</td>
+      </tr>`;
     }).join('');
+
+    list.innerHTML = `
+      <div class="gifts-table-wrap">
+        <table>
+          <thead><tr>
+            <th>Jméno</th>
+            <th>Co přináší</th>
+            <th>Množství</th>
+            <th class="center">Připraveno</th>
+            <th class="center">Foto / Akce</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
   }
 
-  // ── Pomocné funkce ──
+  function openLightbox(url) {
+    document.getElementById('lightboxImg').src = url;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightboxImg').src = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
   function postData(payload) {
     return fetch(GAS_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'text/plain' }, // GAS vyžaduje text/plain pro doPost
-      body:    JSON.stringify(payload),
-      redirect: 'follow'
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify(payload), redirect:'follow'
     });
   }
-
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload  = e => resolve(e.target.result.split(',')[1]);
-      reader.onerror = () => reject(new Error('Čtení souboru selhalo'));
-      reader.readAsDataURL(file);
+      const r = new FileReader();
+      r.onload  = e => resolve(e.target.result.split(',')[1]);
+      r.onerror = () => reject(new Error('Čtení souboru selhalo'));
+      r.readAsDataURL(file);
     });
   }
-
   function showMsg(id, text, type) {
     const el = document.getElementById(id);
-    el.textContent  = text;
-    el.className    = 'msg ' + type + ' show';
+    el.textContent = text; el.className = 'msg ' + type + ' show';
     setTimeout(() => el.classList.remove('show'), 5000);
   }
+  function hideMsg(id) { document.getElementById(id).className = 'msg'; }
+  function escHtml(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s)  { return String(s||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
+  function dnes()      { return new Date().toLocaleDateString('cs-CZ'); }
 
-  function hideMsg(id) {
-    document.getElementById(id).className = 'msg';
-  }
-
-  function escHtml(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function dnes() {
-    return new Date().toLocaleDateString('cs-CZ');
-  }
-
-  // Enter v poli kódu = přihlásit
-  document.getElementById('codeInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') login();
-  });
+  document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key==='Enter') login(); });
 </script>
 </body>
 </html>
