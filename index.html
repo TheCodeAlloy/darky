@@ -211,6 +211,18 @@
   <img id="lightboxImg" src="" alt="Foto dárku">
 </div>
 
+<!-- Modal potvrzení smazání -->
+<div id="confirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8500;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;padding:28px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .2s ease;">
+    <h3 style="color:#c0392b;margin-bottom:12px;font-size:17px;">🗑️ Smazat záznam?</h3>
+    <p id="confirmText" style="color:#555;font-size:14px;margin-bottom:20px;line-height:1.5;"></p>
+    <div style="display:flex;gap:10px;">
+      <button class="btn" style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;flex:1;" onclick="confirmDelete()">Smazat</button>
+      <button class="btn" style="background:#ecf0f1;color:#555;flex:1;" onclick="closeConfirm()">Zrušit</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal editace -->
 <div id="editModal">
   <div class="modal-box">
@@ -359,13 +371,21 @@
       </div>
       <div class="input-group">
         <label>Množství</label>
-        <input type="text" id="rowMnozstvi_${idx}" placeholder="5 ks">
+        <input type="text" id="rowMnozstvi_${idx}" placeholder="počet, balení…">
       </div>
       <div class="input-group">
         <label>Cena (Kč)</label>
         <input type="text" id="rowCena_${idx}" placeholder="0 = zdarma">
       </div>
-      ${idx > 1 ? `<button class="btn-remove-row" onclick="removeGiftRow(${idx})" title="Odebrat">✕</button>` : ''}
+      <div class="input-group" style="flex:0 0 auto;">
+        <label>Foto dárku</label>
+        <button type="button" class="btn btn-sm btn-photo" id="rowPhotoBtn_${idx}"
+                onclick="pickRowPhoto(${idx})" style="margin-top:2px;">📷 Přidat foto</button>
+        <input type="file" id="rowPhotoInput_${idx}" class="hidden-file" accept="image/*" capture="environment">
+        <div id="rowPhotoName_${idx}" style="font-size:11px;color:#27ae60;margin-top:4px;"></div>
+      </div>
+      <button class="btn-remove-row" onclick="removeGiftRow(${idx})" title="Odebrat"
+              style="${idx === 1 ? 'visibility:hidden;' : ''}">✕</button>
     `;
     document.getElementById('giftRows').appendChild(div);
   }
@@ -403,7 +423,8 @@
       const mnozstvi = document.getElementById('rowMnozstvi_' + idx).value.trim();
       const cena     = document.getElementById('rowCena_'     + idx).value.trim();
       if (!co) { showMsg('addMsg', '❗ Vyplň co přineseš u každého dárku.', 'error'); return; }
-      items.push({ co, mnozstvi, cena });
+      const photoFile = rowPhotoFiles[idx] || null;
+      items.push({ co, mnozstvi, cena, photoFile });
     }
     if (items.length === 0) { showMsg('addMsg', '❗ Přidej alespoň jeden dárek.', 'error'); return; }
 
@@ -416,7 +437,17 @@
         const res  = await postData({ action:'addGift', code:currentCode, jmeno, co:item.co, mnozstvi:item.mnozstvi, cena:item.cena });
         const data = await res.json();
         if (data.ok) {
-          currentGifts.push({ id:data.id, jmeno, co:item.co, mnozstvi:item.mnozstvi, cena:item.cena, pripraveno:false, fotoUrl:'', timestamp:dnes() });
+          const newGift = { id:data.id, jmeno, co:item.co, mnozstvi:item.mnozstvi, cena:item.cena, pripraveno:false, fotoUrl:'', timestamp:dnes() };
+          // Nahrát foto pokud bylo vybráno
+          if (item.photoFile) {
+            try {
+              const base64 = await fileToBase64(item.photoFile);
+              const pRes   = await postData({ action:'uploadPhoto', code:currentCode, id:data.id, content:base64, mimeType:item.photoFile.type, fileName:item.photoFile.name });
+              const pData  = await pRes.json();
+              if (pData.ok) { newGift.fotoUrl = pData.fotoUrl; newGift.pripraveno = true; }
+            } catch (pe) { /* foto se nezdařilo, pokračuj */ }
+          }
+          currentGifts.push(newGift);
           saved++;
         }
       } catch (e) { /* pokračuj */ }
@@ -443,7 +474,6 @@
     const cb   = document.getElementById('cb_' + id);
     const gift = currentGifts.find(g => g.id === id);
     if (!gift) return;
-    cb.disabled = true;
     try {
       const res  = await postData({ action:'togglePripraveno', code:currentCode, id });
       const data = await res.json();
@@ -451,12 +481,11 @@
         gift.pripraveno = data.pripraveno;
         cb.checked  = data.pripraveno;
       } else {
-        cb.checked = gift.pripraveno; // vrátit zpět při chybě
+        cb.checked = gift.pripraveno;
       }
     } catch (e) {
       cb.checked = gift.pripraveno;
     }
-    cb.disabled = false;
   }
 
   // ── Editace ──
@@ -609,9 +638,23 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeEdit(); } });
 
-  // ── Smazat dárek ──
-  async function deleteGift(id, jmeno, co) {
-    if (!confirm('Opravdu smazat záznam?\n\n' + jmeno + ' – ' + co)) return;
+  // ── Smazat dárek – vlastní modal ──
+  let pendingDeleteId = null;
+
+  function deleteGift(id, jmeno, co) {
+    pendingDeleteId = id;
+    document.getElementById('confirmText').textContent = jmeno + ' – ' + co;
+    const m = document.getElementById('confirmModal');
+    m.style.display = 'flex';
+  }
+  function closeConfirm() {
+    document.getElementById('confirmModal').style.display = 'none';
+    pendingDeleteId = null;
+  }
+  async function confirmDelete() {
+    const id = pendingDeleteId;
+    closeConfirm();
+    if (!id) return;
     try {
       const res  = await postData({ action:'deleteGift', code:currentCode, id });
       const data = await res.json();
@@ -623,6 +666,25 @@
       }
     } catch (e) { alert('Chyba: ' + e.message); }
   }
+
+  // ── Foto při prvotním zápisu ──
+  const rowPhotoFiles = {};  // idx -> File
+
+  function pickRowPhoto(idx) {
+    document.getElementById('rowPhotoInput_' + idx).click();
+  }
+
+  document.addEventListener('change', function(e) {
+    if (!e.target.id.startsWith('rowPhotoInput_')) return;
+    const idx  = e.target.id.replace('rowPhotoInput_', '');
+    const file = e.target.files[0];
+    if (!file) return;
+    rowPhotoFiles[idx] = file;
+    const nameEl = document.getElementById('rowPhotoName_' + idx);
+    const btnEl  = document.getElementById('rowPhotoBtn_' + idx);
+    if (nameEl) nameEl.textContent = '✅ ' + file.name;
+    if (btnEl)  { btnEl.textContent = '📷 Změnit'; btnEl.classList.add('done'); }
+  });
 
   // ── Helpers ──
   function postData(payload) {
