@@ -90,6 +90,18 @@
     #addForm h3 { color:#2c3e50; margin-bottom:16px; font-size:16px; }
     .form-row { display:flex; gap:12px; flex-wrap:wrap; }
     .form-row .input-group { flex:1; min-width:120px; }
+    .gift-row {
+      display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
+      background:#fff; border:1px solid #e0e6ed; border-radius:10px;
+      padding:12px 14px; margin-bottom:10px; position:relative;
+    }
+    .gift-row .input-group { flex:1; min-width:120px; margin-bottom:0; }
+    .btn-remove-row {
+      background:none; border:1px solid #e74c3c; color:#e74c3c;
+      border-radius:7px; padding:5px 10px; font-size:13px; cursor:pointer;
+      transition:all .2s; flex-shrink:0; align-self:flex-end; margin-bottom:0;
+    }
+    .btn-remove-row:hover { background:#e74c3c; color:#fff; }
 
     /* Modal editace */
     #editModal {
@@ -268,21 +280,12 @@
         <label>Tvoje jméno</label>
         <input type="text" id="newJmeno" placeholder="Jana Nováková" autocomplete="name">
       </div>
-      <div class="form-row">
-        <div class="input-group">
-          <label>Co přineseš</label>
-          <input type="text" id="newCo" placeholder="Čokoláda, propiska…">
-        </div>
-        <div class="input-group">
-          <label>Množství / počet</label>
-          <input type="text" id="newMnozstvi" placeholder="5 ks">
-        </div>
-        <div class="input-group">
-          <label>Cena (Kč)</label>
-          <input type="text" id="newCena" placeholder="0 = zdarma">
-        </div>
+      <div id="giftRows"></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px;">
+        <button class="btn btn-success" onclick="addGift()" id="addGiftBtn">Uložit vše</button>
+        <button class="btn" style="background:#eaf3fb;color:#2a5298;font-size:13px;padding:10px 18px;"
+                onclick="addGiftRow()">＋ Přidat další dárek</button>
       </div>
-      <button class="btn btn-success" onclick="addGift()" id="addGiftBtn">Uložit</button>
       <div id="addMsg" class="msg"></div>
     </div>
 
@@ -338,35 +341,101 @@
     if (e.key === 'Enter') login();
   });
 
-  function toggleAddForm() {
-    const f = document.getElementById('addForm');
-    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+
+
+  // ── Řádky dárků ve formuláři ──
+  let rowCounter = 0;
+
+  function addGiftRow() {
+    rowCounter++;
+    const idx = rowCounter;
+    const div = document.createElement('div');
+    div.className = 'gift-row';
+    div.id = 'giftRow_' + idx;
+    div.innerHTML = `
+      <div class="input-group">
+        <label>Co přineseš</label>
+        <input type="text" id="rowCo_${idx}" placeholder="Čokoláda, propiska…">
+      </div>
+      <div class="input-group">
+        <label>Množství</label>
+        <input type="text" id="rowMnozstvi_${idx}" placeholder="5 ks">
+      </div>
+      <div class="input-group">
+        <label>Cena (Kč)</label>
+        <input type="text" id="rowCena_${idx}" placeholder="0 = zdarma">
+      </div>
+      ${idx > 1 ? `<button class="btn-remove-row" onclick="removeGiftRow(${idx})" title="Odebrat">✕</button>` : ''}
+    `;
+    document.getElementById('giftRows').appendChild(div);
   }
 
-  // ── Přidat dárek ──
+  function removeGiftRow(idx) {
+    const el = document.getElementById('giftRow_' + idx);
+    if (el) el.remove();
+  }
+
+  function toggleAddForm() {
+    const f = document.getElementById('addForm');
+    const isHidden = f.style.display === 'none';
+    f.style.display = isHidden ? 'block' : 'none';
+    if (isHidden) {
+      // Inicializuj první řádek pokud ještě není
+      const rows = document.getElementById('giftRows');
+      if (rows.children.length === 0) {
+        rowCounter = 0;
+        addGiftRow();
+      }
+    }
+  }
+
+  // ── Přidat dárek (jeden nebo více) ──
   async function addGift() {
-    const jmeno    = document.getElementById('newJmeno').value.trim();
-    const co       = document.getElementById('newCo').value.trim();
-    const mnozstvi = document.getElementById('newMnozstvi').value.trim();
-    const cena     = document.getElementById('newCena').value.trim();
+    const jmeno = document.getElementById('newJmeno').value.trim();
     if (!jmeno) { showMsg('addMsg', '❗ Zadej své jméno.', 'error'); return; }
-    if (!co)    { showMsg('addMsg', '❗ Zadej co přineseš.', 'error'); return; }
+
+    // Sesbírej všechny řádky
+    const rows = document.querySelectorAll('.gift-row');
+    const items = [];
+    for (const row of rows) {
+      const idx = row.id.replace('giftRow_', '');
+      const co       = document.getElementById('rowCo_'       + idx).value.trim();
+      const mnozstvi = document.getElementById('rowMnozstvi_' + idx).value.trim();
+      const cena     = document.getElementById('rowCena_'     + idx).value.trim();
+      if (!co) { showMsg('addMsg', '❗ Vyplň co přineseš u každého dárku.', 'error'); return; }
+      items.push({ co, mnozstvi, cena });
+    }
+    if (items.length === 0) { showMsg('addMsg', '❗ Přidej alespoň jeden dárek.', 'error'); return; }
+
     const btn = document.getElementById('addGiftBtn');
     btn.disabled = true; btn.textContent = 'Ukládám…';
-    try {
-      const res  = await postData({ action:'addGift', code:currentCode, jmeno, co, mnozstvi, cena });
-      const data = await res.json();
-      if (data.ok) {
-        currentGifts.push({ id:data.id, jmeno, co, mnozstvi, cena, pripraveno:false, fotoUrl:'', timestamp:dnes() });
-        renderGifts();
-        ['newJmeno','newCo','newMnozstvi','newCena'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('addForm').style.display = 'none';
-        showMsg('addMsg', '✅ Uloženo!', 'success');
-      } else {
-        showMsg('addMsg', '❌ Chyba: ' + data.reason, 'error');
-      }
-    } catch (e) { showMsg('addMsg', '❌ ' + e.message, 'error'); }
-    btn.disabled = false; btn.textContent = 'Uložit';
+
+    let saved = 0;
+    for (const item of items) {
+      try {
+        const res  = await postData({ action:'addGift', code:currentCode, jmeno, co:item.co, mnozstvi:item.mnozstvi, cena:item.cena });
+        const data = await res.json();
+        if (data.ok) {
+          currentGifts.push({ id:data.id, jmeno, co:item.co, mnozstvi:item.mnozstvi, cena:item.cena, pripraveno:false, fotoUrl:'', timestamp:dnes() });
+          saved++;
+        }
+      } catch (e) { /* pokračuj */ }
+    }
+
+    btn.disabled = false; btn.textContent = 'Uložit vše';
+
+    if (saved === items.length) {
+      renderGifts();
+      document.getElementById('newJmeno').value = '';
+      document.getElementById('giftRows').innerHTML = '';
+      rowCounter = 0;
+      addGiftRow();
+      document.getElementById('addForm').style.display = 'none';
+      showMsg('addMsg', '✅ Uloženo ' + saved + ' dárků!', 'success');
+    } else {
+      showMsg('addMsg', `⚠️ Uloženo ${saved}/${items.length} dárků.`, 'error');
+      renderGifts();
+    }
   }
 
   // ── Toggle připraveno ──
