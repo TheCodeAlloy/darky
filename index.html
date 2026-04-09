@@ -211,16 +211,19 @@
 
   <!-- ═══ PŘIHLÁŠENÍ ═══ -->
   <div id="loginSection">
-    <h2>Zadejte kód projektu</h2>
+    <h2>Zadejte přístupový kód</h2>
     <div class="input-group" style="margin-top:20px">
-      <label for="codeInput">Přístupový kód</label>
       <input type="text" id="codeInput" placeholder="např. berlin2025"
              autocomplete="off" autocapitalize="off">
     </div>
     <button class="btn btn-primary btn-block" onclick="login()">
-      Přejít na projekt
+      Pokračovat
     </button>
     <div id="loginMsg" class="msg"></div>
+    <p style="margin-top:20px; font-size:13px; color:#7f8c8d; text-align:center; line-height:1.6;">
+      Pokud přístupový kód neznáte nebo vám nefunguje přístup do systému,<br>
+      kontaktujte správce systému.
+    </p>
   </div>
 
   <!-- ═══ APLIKACE (zobrazí se po přihlášení) ═══ -->
@@ -282,7 +285,7 @@
   // ══════════════════════════════════════════════
   //  KONFIGURACE – sem vlož URL svého GAS Web Appu
   // ══════════════════════════════════════════════
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuaLP_BxX4cJjY4pGI-lg9msH0izGggcKcGxvqb31DeUmb0WwgXC5qzUSBS76aN5kFzw/exec';
+  const GAS_URL = 'VLOZ_SEM_URL_SVEHO_GAS_WEBAPPU';
 
   // ── Stav aplikace ──
   let currentCode = '';
